@@ -1,5 +1,5 @@
 version: "Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)"
 options: "6d0fa5a84d898628c0a79ba1abb62b40"
-build_time: [1609750282, 992720000]
+build_time: [1611767985, 13676000]
 inputs:
   "/Users/flavio.silverio/Desktop/flutter/recipes_app/recipes/ios/Runner/AppDelegate.swift": [1609583364, 84821576]
