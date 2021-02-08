@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:recipes/models/category.dart';
-import 'package:recipes/data/dummy_data.dart';
 import 'package:recipes/widgets/meal_item.dart';
 import 'package:recipes/models/meal.dart';
 
@@ -9,6 +8,10 @@ class CategoryMeals extends StatefulWidget {
 
   // CategoryMeals(this.category);
   static const routeName = "CategoryMeals";
+
+  final List<Meal> availableMeals;
+
+  CategoryMeals(this.availableMeals);
 
   @override
   _CategoryMealsState createState() => _CategoryMealsState();
@@ -25,7 +28,7 @@ class _CategoryMealsState extends State<CategoryMeals> {
       final category = ModalRoute.of(context).settings.arguments as Category;
 
       categoryTitle = category.title;
-      displayedMeals = DUMMY_MEALS.where((meal) {
+      displayedMeals = widget.availableMeals.where((meal) {
         return meal.categories.contains(category.id);
       }).toList();
       _loadedInitData = true;
@@ -48,8 +51,7 @@ class _CategoryMealsState extends State<CategoryMeals> {
       body: ListView.builder(
         itemBuilder: (ctx, index) {
           return MealItem(
-              meal: displayedMeals[index],
-              removeItem: _removeMeal); //Text(categoryMeals[index].title);
+              meal: displayedMeals[index]); //Text(categoryMeals[index].title);
         },
         itemCount: displayedMeals.length,
       ),
