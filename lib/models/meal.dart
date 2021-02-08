@@ -18,7 +18,6 @@ class Meal {
   final bool isLactoseFree;
   final bool isVegan;
   final bool isVegetarian;
-
   const Meal(
       {@required this.id,
       @required this.categories,
@@ -47,7 +46,7 @@ class Meal {
     }
   }
 
-    String get affordabilityText {
+  String get affordabilityText {
     switch (affordability) {
       case Affordability.Affordable:
         return "Affordable";

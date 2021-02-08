@@ -6,13 +6,18 @@ import 'package:recipes/screens/meal_detail.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
+  final Function removeItem;
 
-  MealItem(this.meal);
+  MealItem({@required this.meal, @required this.removeItem});
 
   void selectMeal(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(
-      MealDetail.routeName, 
-      arguments: meal);
+    Navigator.of(ctx)
+        .pushNamed(MealDetail.routeName, arguments: meal)
+        .then((value) {
+      if (value != null) {
+        removeItem(value);
+      }
+    });
   }
 
   @override
@@ -61,9 +66,12 @@ class MealItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    MealInfoItem(icon: Icons.schedule, text: meal.duration.toString() + " min"),
+                    MealInfoItem(
+                        icon: Icons.schedule,
+                        text: meal.duration.toString() + " min"),
                     MealInfoItem(icon: Icons.work, text: meal.complexityText),
-                    MealInfoItem(icon: Icons.money, text: meal.affordabilityText)
+                    MealInfoItem(
+                        icon: Icons.money, text: meal.affordabilityText)
                   ],
                 ))
           ],
