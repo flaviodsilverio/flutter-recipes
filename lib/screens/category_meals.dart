@@ -4,9 +4,6 @@ import 'package:recipes/widgets/meal_item.dart';
 import 'package:recipes/models/meal.dart';
 
 class CategoryMeals extends StatefulWidget {
-  // final Category category;
-
-  // CategoryMeals(this.category);
   static const routeName = "CategoryMeals";
 
   final List<Meal> availableMeals;
@@ -36,25 +33,20 @@ class _CategoryMealsState extends State<CategoryMeals> {
     super.didChangeDependencies();
   }
 
-  void _removeMeal(String mealID) {
-    setState(() {
-      displayedMeals.removeWhere((element) => element.id == mealID);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(categoryTitle),
       ),
-      body: ListView.builder(
-        itemBuilder: (ctx, index) {
-          return MealItem(
-              meal: displayedMeals[index]); //Text(categoryMeals[index].title);
-        },
-        itemCount: displayedMeals.length,
-      ),
+      body: displayedMeals.length > 0
+          ? ListView.builder(
+              itemBuilder: (ctx, index) {
+                return MealItem(meal: displayedMeals[index]);
+              },
+              itemCount: displayedMeals.length,
+            )
+          : Center(child: Text("There are no meals for the selected filters")),
     );
   }
 }

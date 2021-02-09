@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:recipes/models/filter.dart';
 import 'package:recipes/widgets/main_drawer.dart';
 
 class FiltersScreen extends StatefulWidget {
   static const routeName = "/filters";
 
-  final Map<String, bool> currentFilters;
+  final List<Filter> currentFilters;
   final Function saveFilters;
 
   FiltersScreen(this.currentFilters, this.saveFilters);
@@ -14,21 +15,6 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  bool _glutenFree = false;
-  bool _vegetarian = false;
-  bool _vegan = false;
-  bool _lactoseFree = false;
-
-  @override
-  initState() {
-    _glutenFree = widget.currentFilters["gluten"];
-    _vegetarian = widget.currentFilters["vegetarian"];
-    _vegan = widget.currentFilters["vegan"];
-    _lactoseFree = widget.currentFilters["lactose"];
-
-    super.initState();
-  }
-
   Widget _buildSwitchListTile(String title, String description,
       bool currentValue, Function updateValue) {
     return SwitchListTile(
@@ -44,19 +30,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Filters"),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.save),
-              onPressed: () {
-                final selectedFilters = {
-                  "gluten": _glutenFree,
-                  "lactose": _lactoseFree,
-                  "vegan": _vegan,
-                  "vegetarian": _vegetarian
-                };
-                widget.saveFilters(selectedFilters);
-              })
-        ],
       ),
       drawer: MainDrawer(),
       body: Column(
@@ -69,34 +42,20 @@ class _FiltersScreenState extends State<FiltersScreen> {
             ),
           ),
           Expanded(
-              child: ListView(children: [
-            _buildSwitchListTile(
-                "Gluten-free", "Include only Gluten-free options", _glutenFree,
-                (newValue) {
-              setState(() {
-                _glutenFree = !_glutenFree;
-              });
-            }),
-            _buildSwitchListTile("Lactose-free",
-                "Include only Lactose-free options", _lactoseFree, (newValue) {
-              setState(() {
-                _lactoseFree = newValue;
-              });
-            }),
-            _buildSwitchListTile("Vegan", "Include only Vegan options", _vegan,
-                (newValue) {
-              setState(() {
-                _vegan = newValue;
-              });
-            }),
-            _buildSwitchListTile(
-                "Vegetarian", "Include only Vegetarian options", _vegetarian,
-                (newValue) {
-              setState(() {
-                _vegetarian = newValue;
-              });
-            })
-          ])),
+              child: ListView.builder(
+                  itemCount: widget.currentFilters.length,
+                  itemBuilder: (BuildContext ctxt, int index) {
+                    return _buildSwitchListTile(
+                        widget.currentFilters[index].name(),
+                        widget.currentFilters[index].description(),
+                        widget.currentFilters[index].value, (newValue) {
+                      setState(() {
+                        widget.currentFilters[index].value =
+                            !widget.currentFilters[index].value;
+                        widget.saveFilters(widget.currentFilters);
+                      });
+                    });
+                  }))
         ],
       ),
     );

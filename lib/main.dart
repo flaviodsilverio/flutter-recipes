@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipes/data/dummy_data.dart';
+import 'package:recipes/models/filter.dart';
 import 'package:recipes/screens/category_meals.dart';
 import 'package:recipes/screens/filters.dart';
 import 'package:recipes/screens/meal_detail.dart';
@@ -18,39 +19,44 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Map<String, bool> _filters = {
-    "gluten": false,
-    "lactose": false,
-    "vegan": false,
-    "vegetarian": false
-  };
+  List<Filter> _filters = [
+    Filter(type: FilterType.vegan, value: false),
+    Filter(type: FilterType.vegetarian, value: false),
+    Filter(type: FilterType.dairyFree, value: false),
+    Filter(type: FilterType.glutenFree, value: false),
+  ];
 
   List<Meal> _availableMeals = DUMMY_MEALS;
   List<Meal> _favouriteMeals = [];
 
-  void _setFilters(Map<String, bool> filterData) {
+  void _setFilters(List<Filter> filterData) {
     setState(() {
       _filters = filterData;
+      _availableMeals = DUMMY_MEALS;
 
-      _availableMeals = DUMMY_MEALS.where((meal) {
-        if (_filters["gluten"] && !meal.isGlutenFree) {
-          return false;
+      _filters.forEach((filter) {
+        if (filter.value) {
+          if (filter.type == FilterType.vegan) {
+            _availableMeals =
+                _availableMeals.where((element) => element.isVegan).toList();
+          }
+          if (filter.type == FilterType.vegetarian) {
+            _availableMeals = _availableMeals
+                .where((element) => element.isVegetarian)
+                .toList();
+          }
+          if (filter.type == FilterType.glutenFree) {
+            _availableMeals = _availableMeals
+                .where((element) => element.isGlutenFree)
+                .toList();
+          }
+          if (filter.type == FilterType.dairyFree) {
+            _availableMeals = _availableMeals
+                .where((element) => element.isLactoseFree)
+                .toList();
+          }
         }
-
-        if (_filters["lactose"] && !meal.isLactoseFree) {
-          return false;
-        }
-
-        if (_filters["vegan"] && !meal.isVegan) {
-          return false;
-        }
-
-        if (_filters["vegetarian"] && !meal.isVegetarian) {
-          return false;
-        }
-
-        return true;
-      }).toList();
+      });
     });
   }
 
