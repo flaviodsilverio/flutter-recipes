@@ -2,7 +2,7 @@
 
 Recipes app developed while learning Flutter
 
-![](Images/i2.PNG)
-![](Images/i2.PNG)
+![](Images/i0.PNG)
+![](Images/i1.PNG)
 ![](Images/i2.PNG)
 
